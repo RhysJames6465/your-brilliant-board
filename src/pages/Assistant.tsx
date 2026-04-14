@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import ReactMarkdown from "react-markdown";
+import { useTasks } from "@/hooks/useTasks";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -15,6 +16,7 @@ export default function AssistantPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { data: tasks } = useTasks();
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -47,7 +49,7 @@ export default function AssistantPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: allMessages }),
+        body: JSON.stringify({ messages: allMessages, tasks: tasks || [] }),
       });
 
       if (!resp.ok) {
