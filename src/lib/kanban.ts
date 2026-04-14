@@ -15,6 +15,8 @@ export const CATEGORIES = [
   { label: "Media", color: "hsl(25, 95%, 53%)" },
   { label: "Research", color: "hsl(199, 89%, 48%)" },
   { label: "Marketing", color: "hsl(340, 82%, 52%)" },
+  { label: "Personal", color: "hsl(280, 60%, 50%)" },
+  { label: "Other", color: "hsl(220, 15%, 55%)" },
 ];
 
 export function getCategoryColor(category: string | null): string {
