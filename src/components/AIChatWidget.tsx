@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTasks } from "@/hooks/useTasks";
 
 type Msg = { role: "user" | "assistant"; content: string };
 

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import ReactMarkdown from "react-markdown";
+import { useTasks } from "@/hooks/useTasks";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
