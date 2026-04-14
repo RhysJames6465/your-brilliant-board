@@ -1,4 +1,4 @@
-import { LayoutDashboard, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Settings, LogOut, Bot } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -15,6 +15,7 @@ import {
 
 const items = [
   { title: "Board", url: "/", icon: LayoutDashboard },
+  { title: "AI Assistant", url: "/assistant", icon: Bot },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
