@@ -1,45 +1,37 @@
 
-# Kanban Board — Full-Featured Task Manager
 
-## Design Style
-Inspired by the reference images: clean white cards on a light background, purple/indigo accent colors, dark sidebar navigation, colored category tags, progress indicators, and avatar displays. Modern, polished, and interactive.
+# Fix: Connect AI Assistant to Board Data
 
-## Core Layout
-- **Dark sidebar** (left) with navigation icons: Home, Board, Calendar, Settings
-- **Top bar** with search, notifications, and user profile avatar/name
-- **Main area** with the Kanban board (3 columns: To-Do, In Progress, Completed)
-- **Right sidebar** with board stats: total tasks, completed count, in-progress count, and a donut chart showing completion percentage
+## Problem
+The AI assistant cannot see the user's tasks. The edge function only receives chat messages and has a system prompt that says "let them know you can see their board context when they share it" — but there's no mechanism to actually share it.
 
-## Kanban Board Features
-- **3 columns**: To-Do, In Progress, Completed — each with a task count badge
-- **Task cards** showing: title, description, due date, time estimate, and color-coded category tags (e.g. "Design", "Development", "Media")
-- **Full drag & drop** between columns and within columns for reordering (using @hello-pangea/dnd)
-- **Add Task** button opens a modal/dialog to create new tasks with all fields
-- **Edit & delete** tasks via a card menu (three-dot icon)
+## Solution
+Inject the user's current board data into every AI request so the assistant always has full context.
 
-## AI Chat Widget
-- **Bottom-right floating chat bubble** that expands into a chat panel
-- Full AI assistant for task management — can answer questions, suggest tasks, summarize board status, and provide insights
-- Powered by Lovable AI via a Supabase Edge Function
-- Streaming responses rendered with markdown support
+### 1. Frontend — Send tasks with each message (Assistant.tsx + AIChatWidget.tsx)
+- Import `useTasks` hook in both the Assistant page and the AIChatWidget
+- When sending a message, fetch current tasks and include them in the request body as `{ messages, tasks }`
+- Tasks array includes title, description, status, category, due_date, time_estimate
 
-## Authentication
-- Email/password login & signup pages
-- Password reset flow with dedicated reset page
-- Protected routes — redirect to login if not authenticated
+### 2. Edge Function — Inject task context into system prompt (chat/index.ts)
+- Accept `tasks` from the request body alongside `messages`
+- Build a dynamic system prompt section that lists all tasks grouped by status (To-Do, In Progress, Completed) with their details (title, description, due date, category, time estimate)
+- Update the system prompt to tell the AI it has full access to the user's board data and can answer questions about specific tasks, deadlines, workload, etc.
 
-## User Profiles
-- Profiles table with display name and avatar URL
-- Auto-created on signup via database trigger
-- Profile settings page to update name and avatar
+### Technical Details
 
-## Database (Supabase)
-- **profiles** table: id, user_id, display_name, avatar_url
-- **tasks** table: id, user_id, title, description, status (to-do/in-progress/completed), due_date, time_estimate, category, position (for ordering), created_at, updated_at
-- Row-Level Security so each user only sees their own tasks
-- Real-time subscriptions to keep the board in sync
+**Frontend change** (both Assistant.tsx and AIChatWidget.tsx):
+```typescript
+const { data: tasks } = useTasks();
+// In sendMessage, include tasks in the fetch body:
+body: JSON.stringify({ messages: allMessages, tasks: tasks || [] })
+```
 
-## Pages
-1. **Login / Signup** — clean auth forms
-2. **Board** (main page) — the Kanban view with sidebar + stats
-3. **Settings** — profile management (name, avatar)
+**Edge function change** (chat/index.ts):
+- Parse `tasks` from request body
+- Format tasks into a readable context string grouped by column
+- Prepend to system prompt so the AI always knows the user's current board state
+- Update system prompt instructions to reference that it can see tasks directly
+
+This is a small change across 3 files with no database or migration changes needed.
+
