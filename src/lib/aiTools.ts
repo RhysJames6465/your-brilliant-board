@@ -37,11 +37,13 @@ export async function executeToolCall(call: ToolCall, userId: string): Promise<s
     if (name === "update_task") {
       const { id, ...updates } = args;
       if (!id) throw new Error("Missing task id");
-      // Strip undefined
-      const clean = Object.fromEntries(Object.entries(updates).filter(([_, v]) => v !== undefined));
+      const clean: Record<string, any> = {};
+      for (const [k, v] of Object.entries(updates)) {
+        if (v !== undefined) clean[k] = v;
+      }
       const { data, error } = await supabase
         .from("tasks")
-        .update(clean)
+        .update(clean as any)
         .eq("id", id)
         .select()
         .single();
