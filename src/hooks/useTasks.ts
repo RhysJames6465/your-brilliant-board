@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Task, TaskStatus } from "@/lib/kanban";
+import { Task, TaskStatus, TaskPriority } from "@/lib/kanban";
 import { toast } from "@/hooks/use-toast";
 
 export function useTasks() {
@@ -33,6 +33,7 @@ export function useCreateTask() {
       category?: string;
       due_date?: string;
       time_estimate?: string;
+      priority?: TaskPriority;
     }) => {
       const { data, error } = await supabase
         .from("tasks")

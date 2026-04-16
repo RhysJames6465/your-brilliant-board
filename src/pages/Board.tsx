@@ -7,14 +7,15 @@ import { AIChatWidget } from "@/components/AIChatWidget";
 import { useTasks, useDeleteTask, useBulkUpdatePositions } from "@/hooks/useTasks";
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
-import { Task, TaskStatus, COLUMNS } from "@/lib/kanban";
+import { Task, TaskStatus, COLUMNS, PRIORITIES, getPriorityMeta, TaskPriority } from "@/lib/kanban";
 import { celebrateCompletion } from "@/lib/confetti";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Bell, Plus } from "lucide-react";
+import { Search, Bell, Plus, ArrowDownUp } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Board() {
   const { data: tasks = [], isLoading } = useTasks();
@@ -27,16 +28,22 @@ export default function Board() {
   const [dialogStatus, setDialogStatus] = useState<TaskStatus>("todo");
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [search, setSearch] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "all">("all");
+  const [sortByPriority, setSortByPriority] = useState(false);
 
-  const filteredTasks = tasks.filter(t =>
-    t.title.toLowerCase().includes(search.toLowerCase()) ||
-    t.description?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredTasks = tasks.filter(t => {
+    const matchesSearch =
+      t.title.toLowerCase().includes(search.toLowerCase()) ||
+      t.description?.toLowerCase().includes(search.toLowerCase());
+    const matchesPriority = priorityFilter === "all" || t.priority === priorityFilter;
+    return matchesSearch && matchesPriority;
+  });
 
   const groupedTasks = COLUMNS.reduce((acc, col) => {
-    acc[col.id] = filteredTasks
-      .filter(t => t.status === col.id)
-      .sort((a, b) => a.position - b.position);
+    const colTasks = filteredTasks.filter(t => t.status === col.id);
+    acc[col.id] = sortByPriority
+      ? [...colTasks].sort((a, b) => getPriorityMeta(a.priority as TaskPriority).rank - getPriorityMeta(b.priority as TaskPriority).rank)
+      : colTasks.sort((a, b) => a.position - b.position);
     return acc;
   }, {} as Record<TaskStatus, Task[]>);
 
@@ -122,9 +129,35 @@ export default function Board() {
                   <h1 className="text-2xl font-bold">Work Planner</h1>
                   <p className="text-sm text-muted-foreground mt-1">Manage and track your tasks</p>
                 </div>
-                <Button onClick={() => handleAdd("todo")} className="gap-2">
-                  <Plus className="w-4 h-4" /> Add Task
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Select value={priorityFilter} onValueChange={v => setPriorityFilter(v as TaskPriority | "all")}>
+                    <SelectTrigger className="w-[140px] h-9">
+                      <SelectValue placeholder="Priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All priorities</SelectItem>
+                      {PRIORITIES.map(p => (
+                        <SelectItem key={p.value} value={p.value}>
+                          <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
+                            {p.label}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant={sortByPriority ? "default" : "outline"}
+                    size="sm"
+                    className="gap-2 h-9"
+                    onClick={() => setSortByPriority(s => !s)}
+                  >
+                    <ArrowDownUp className="w-4 h-4" /> Sort by priority
+                  </Button>
+                  <Button onClick={() => handleAdd("todo")} className="gap-2">
+                    <Plus className="w-4 h-4" /> Add Task
+                  </Button>
+                </div>
               </div>
 
               {isLoading ? (

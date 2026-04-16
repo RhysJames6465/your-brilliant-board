@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCreateTask, useUpdateTask } from "@/hooks/useTasks";
-import { CATEGORIES, Task, TaskStatus } from "@/lib/kanban";
+import { CATEGORIES, PRIORITIES, Task, TaskStatus, TaskPriority } from "@/lib/kanban";
 import { celebrateCompletion } from "@/lib/confetti";
 
 type Props = {
@@ -23,6 +23,7 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
   const [dueDate, setDueDate] = useState(editTask?.due_date ?? "");
   const [timeEstimate, setTimeEstimate] = useState(editTask?.time_estimate ?? "");
   const [status, setStatus] = useState<TaskStatus>(editTask?.status ?? defaultStatus);
+  const [priority, setPriority] = useState<TaskPriority>((editTask?.priority as TaskPriority) ?? "medium");
 
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
@@ -36,6 +37,7 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
       due_date: dueDate || undefined,
       time_estimate: timeEstimate || undefined,
       status,
+      priority,
     };
 
     const wasCompleted = editTask?.status === "completed";
@@ -46,7 +48,7 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
     }
     if (status === "completed" && !wasCompleted) celebrateCompletion();
     onOpenChange(false);
-    setTitle(""); setDescription(""); setCategory(""); setDueDate(""); setTimeEstimate("");
+    setTitle(""); setDescription(""); setCategory(""); setDueDate(""); setTimeEstimate(""); setPriority("medium");
   };
 
   return (
@@ -77,16 +79,32 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Category</Label>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+              <Label>Priority</Label>
+              <Select value={priority} onValueChange={v => setPriority(v as TaskPriority)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {CATEGORIES.map(c => (
-                    <SelectItem key={c.label} value={c.label}>{c.label}</SelectItem>
+                  {PRIORITIES.map(p => (
+                    <SelectItem key={p.value} value={p.value}>
+                      <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
+                        {p.label}
+                      </span>
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label>Category</Label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+              <SelectContent>
+                {CATEGORIES.map(c => (
+                  <SelectItem key={c.label} value={c.label}>{c.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
