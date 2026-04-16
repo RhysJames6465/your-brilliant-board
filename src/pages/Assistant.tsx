@@ -103,7 +103,7 @@ export default function AssistantPage() {
                 </div>
               )}
 
-              {messages.map((msg, i) => (
+              {messages.filter(m => m.role !== "tool").map((msg, i) => (
                 <div key={i} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                   {msg.role === "assistant" && (
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
@@ -116,9 +116,13 @@ export default function AssistantPage() {
                       : "bg-muted text-foreground rounded-bl-md"
                   }`}>
                     {msg.role === "assistant" ? (
-                      <div className="prose prose-sm dark:prose-invert max-w-none [&_p]:m-0 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:m-0 [&_ol]:m-0 [&_li]:m-0">
-                        <ReactMarkdown>{msg.content}</ReactMarkdown>
-                      </div>
+                      msg.content ? (
+                        <div className="prose prose-sm dark:prose-invert max-w-none [&_p]:m-0 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:m-0 [&_ol]:m-0 [&_li]:m-0">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground italic">Working on your board…</span>
+                      )
                     ) : msg.content}
                   </div>
                   {msg.role === "user" && (
@@ -129,13 +133,13 @@ export default function AssistantPage() {
                 </div>
               ))}
 
-              {loading && messages[messages.length - 1]?.role !== "assistant" && (
+              {loading && (
                 <div className="flex gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-primary" />
+                    {toolStatus ? <Wrench className="w-4 h-4 text-primary" /> : <Bot className="w-4 h-4 text-primary" />}
                   </div>
                   <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-3 text-sm text-muted-foreground">
-                    <span className="animate-pulse">Thinking...</span>
+                    <span className="animate-pulse">{toolStatus ? `Running ${toolStatus}…` : "Thinking..."}</span>
                   </div>
                 </div>
               )}
