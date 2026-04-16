@@ -8,6 +8,7 @@ import { useTasks, useDeleteTask, useBulkUpdatePositions } from "@/hooks/useTask
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { Task, TaskStatus, COLUMNS } from "@/lib/kanban";
+import { celebrateCompletion } from "@/lib/confetti";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Input } from "@/components/ui/input";
@@ -74,6 +75,7 @@ export default function Board() {
         ...dstCol.map((t, i) => ({ id: t.id, position: i, status: dstStatus })),
       ];
       bulkUpdate.mutate(updates);
+      if (dstStatus === "completed") celebrateCompletion();
     }
   }, [groupedTasks, bulkUpdate]);
 
