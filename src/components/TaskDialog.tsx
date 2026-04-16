@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCreateTask, useUpdateTask } from "@/hooks/useTasks";
 import { CATEGORIES, Task, TaskStatus } from "@/lib/kanban";
+import { celebrateCompletion } from "@/lib/confetti";
 
 type Props = {
   open: boolean;
@@ -37,11 +38,13 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
       status,
     };
 
+    const wasCompleted = editTask?.status === "completed";
     if (editTask) {
       await updateTask.mutateAsync({ id: editTask.id, ...payload });
     } else {
       await createTask.mutateAsync(payload);
     }
+    if (status === "completed" && !wasCompleted) celebrateCompletion();
     onOpenChange(false);
     setTitle(""); setDescription(""); setCategory(""); setDueDate(""); setTimeEstimate("");
   };

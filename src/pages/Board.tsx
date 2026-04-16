@@ -8,6 +8,7 @@ import { useTasks, useDeleteTask, useBulkUpdatePositions } from "@/hooks/useTask
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { Task, TaskStatus, COLUMNS } from "@/lib/kanban";
+import { celebrateCompletion } from "@/lib/confetti";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Input } from "@/components/ui/input";
@@ -74,6 +75,7 @@ export default function Board() {
         ...dstCol.map((t, i) => ({ id: t.id, position: i, status: dstStatus })),
       ];
       bulkUpdate.mutate(updates);
+      if (dstStatus === "completed") celebrateCompletion();
     }
   }, [groupedTasks, bulkUpdate]);
 
@@ -117,7 +119,7 @@ export default function Board() {
             <main className="flex-1 p-4 lg:p-6 overflow-auto">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-2xl font-bold">Kanban Board</h1>
+                  <h1 className="text-2xl font-bold">Work Planner</h1>
                   <p className="text-sm text-muted-foreground mt-1">Manage and track your tasks</p>
                 </div>
                 <Button onClick={() => handleAdd("todo")} className="gap-2">
