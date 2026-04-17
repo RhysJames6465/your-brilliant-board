@@ -128,7 +128,12 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
               <Input value={timeEstimate} onChange={e => setTimeEstimate(e.target.value)} placeholder="e.g. 2h" />
             </div>
           </div>
-          <div className="flex justify-end gap-2 pt-2">
+          {editTask && (
+            <div className="space-y-2 pt-2 border-t">
+              <Label>Subtasks</Label>
+              <SubtaskList taskId={editTask.id} />
+            </div>
+          )}
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit" disabled={createTask.isPending || updateTask.isPending}>
               {editTask ? "Save" : "Create"}
