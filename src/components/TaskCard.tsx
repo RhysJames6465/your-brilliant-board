@@ -25,7 +25,11 @@ export function TaskCard({ task, index, onEdit, onDelete }: Props) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`p-4 cursor-grab active:cursor-grabbing transition-shadow border border-border/60 hover:shadow-md group ${urgencyStyles.border} ${
+          onClick={(e) => {
+            if ((e.target as HTMLElement).closest("[data-no-card-open]")) return;
+            onEdit(task);
+          }}
+          className={`p-4 cursor-pointer transition-shadow border border-border/60 hover:shadow-md group ${urgencyStyles.border} ${
             snapshot.isDragging ? "shadow-xl rotate-2 scale-105" : ""
           }`}
         >
@@ -76,7 +80,11 @@ export function TaskCard({ task, index, onEdit, onDelete }: Props) {
               </div>
             </div>
             <DropdownMenu>
-              <DropdownMenuTrigger className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted">
+              <DropdownMenuTrigger
+                data-no-card-open
+                onClick={(e) => e.stopPropagation()}
+                className="opacity-60 md:opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted"
+              >
                 <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

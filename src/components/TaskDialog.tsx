@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,17 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
 
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
+
+  useEffect(() => {
+    if (!open) return;
+    setTitle(editTask?.title ?? "");
+    setDescription(editTask?.description ?? "");
+    setCategory(editTask?.category ?? "");
+    setDueDate(editTask?.due_date ?? "");
+    setTimeEstimate(editTask?.time_estimate ?? "");
+    setStatus(editTask?.status ?? defaultStatus);
+    setPriority((editTask?.priority as TaskPriority) ?? "medium");
+  }, [open, editTask, defaultStatus]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
