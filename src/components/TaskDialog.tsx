@@ -134,6 +134,7 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
               <SubtaskList taskId={editTask.id} />
             </div>
           )}
+          <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit" disabled={createTask.isPending || updateTask.isPending}>
               {editTask ? "Save" : "Create"}
