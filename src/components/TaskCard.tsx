@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Calendar, Clock, Pencil, Trash2, AlertTriangle, Flag } from "lucide-react";
 import { Draggable } from "@hello-pangea/dnd";
+import { FocusButton } from "@/components/FocusButton";
 
 type Props = {
   task: Task;
@@ -79,23 +80,26 @@ export function TaskCard({ task, index, onEdit, onDelete }: Props) {
                 )}
               </div>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                data-no-card-open
-                onClick={(e) => e.stopPropagation()}
-                className="opacity-60 md:opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted"
-              >
-                <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => onEdit(task)}>
-                  <Pencil className="w-3.5 h-3.5 mr-2" /> Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onDelete(task.id)} className="text-destructive focus:text-destructive">
-                  <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex items-center gap-0.5">
+              <FocusButton taskId={task.id} />
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  data-no-card-open
+                  onClick={(e) => e.stopPropagation()}
+                  className="opacity-60 md:opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted"
+                >
+                  <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onEdit(task)}>
+                    <Pencil className="w-3.5 h-3.5 mr-2" /> Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onDelete(task.id)} className="text-destructive focus:text-destructive">
+                    <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </Card>
       )}
