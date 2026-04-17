@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCreateTask, useUpdateTask } from "@/hooks/useTasks";
 import { CATEGORIES, PRIORITIES, Task, TaskStatus, TaskPriority } from "@/lib/kanban";
 import { celebrateCompletion } from "@/lib/confetti";
+import { SubtaskList } from "@/components/SubtaskList";
 
 type Props = {
   open: boolean;
@@ -127,6 +128,12 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
               <Input value={timeEstimate} onChange={e => setTimeEstimate(e.target.value)} placeholder="e.g. 2h" />
             </div>
           </div>
+          {editTask && (
+            <div className="space-y-2 pt-2 border-t">
+              <Label>Subtasks</Label>
+              <SubtaskList taskId={editTask.id} />
+            </div>
+          )}
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit" disabled={createTask.isPending || updateTask.isPending}>
