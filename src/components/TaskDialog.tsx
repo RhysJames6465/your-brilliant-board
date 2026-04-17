@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCreateTask, useUpdateTask } from "@/hooks/useTasks";
 import { CATEGORIES, PRIORITIES, Task, TaskStatus, TaskPriority } from "@/lib/kanban";
 import { celebrateCompletion } from "@/lib/confetti";
+import { SubtaskList } from "@/components/SubtaskList";
 
 type Props = {
   open: boolean;
