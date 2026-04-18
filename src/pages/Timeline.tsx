@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { addDays, addWeeks, differenceInCalendarDays, format, isSameDay, startOfWeek, parseISO } from "date-fns";
-import { Bell, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
+import { AlertsBell } from "@/components/AlertsBell";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
@@ -110,7 +111,7 @@ export default function Timeline() {
               <h1 className="text-lg font-semibold">Timeline</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon"><Bell className="w-5 h-5" /></Button>
+              <AlertsBell />
               <Avatar className="w-9 h-9">
                 <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">{initials}</AvatarFallback>
               </Avatar>

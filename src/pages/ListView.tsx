@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { format, parseISO } from "date-fns";
-import { ArrowUp, ArrowDown, ArrowUpDown, Bell, Plus } from "lucide-react";
+import { ArrowUp, ArrowDown, ArrowUpDown, Plus } from "lucide-react";
+import { AlertsBell } from "@/components/AlertsBell";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
@@ -131,7 +132,7 @@ export default function ListView() {
               <h1 className="text-lg font-semibold">List</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon"><Bell className="w-5 h-5" /></Button>
+              <AlertsBell />
               <Avatar className="w-9 h-9">
                 <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">{initials}</AvatarFallback>
               </Avatar>

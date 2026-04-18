@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User } from "lucide-react";
+import { NotificationSettings } from "@/components/NotificationSettings";
 
 export default function SettingsPage() {
   const { data: profile } = useProfile();
@@ -42,7 +43,7 @@ export default function SettingsPage() {
             <SidebarTrigger />
             <h1 className="text-lg font-semibold ml-3">Settings</h1>
           </header>
-          <main className="flex-1 p-4 lg:p-8 max-w-2xl">
+          <main className="flex-1 p-4 lg:p-8 max-w-2xl space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -76,6 +77,8 @@ export default function SettingsPage() {
                 </form>
               </CardContent>
             </Card>
+
+            <NotificationSettings />
           </main>
         </div>
       </div>
