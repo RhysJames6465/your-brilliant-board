@@ -1,4 +1,4 @@
-import { LayoutDashboard, Settings, LogOut, Bot, CalendarDays } from "lucide-react";
+import { LayoutDashboard, Settings, LogOut, Bot, CalendarDays, List, GanttChart } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -15,6 +15,8 @@ import {
 
 const items = [
   { title: "Board", url: "/", icon: LayoutDashboard },
+  { title: "List", url: "/list", icon: List },
+  { title: "Timeline", url: "/timeline", icon: GanttChart },
   { title: "Calendar", url: "/calendar", icon: CalendarDays },
   { title: "AI Assistant", url: "/assistant", icon: Bot },
   { title: "Settings", url: "/settings", icon: Settings },
