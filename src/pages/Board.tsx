@@ -14,7 +14,8 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Bell, Plus, ArrowDownUp } from "lucide-react";
+import { Search, Plus, ArrowDownUp } from "lucide-react";
+import { AlertsBell } from "@/components/AlertsBell";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Board() {
@@ -110,9 +111,7 @@ export default function Board() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
-              </Button>
+              <AlertsBell />
               <Avatar className="w-9 h-9">
                 <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
                   {initials}
