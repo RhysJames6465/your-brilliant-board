@@ -10,7 +10,7 @@ import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { Task, TaskPriority, getPriorityMeta, getCategoryColor } from "@/lib/kanban";
 import { TaskDialog } from "@/components/TaskDialog";
-import { parseDurationToSeconds } from "@/lib/timer";
+import { parseEstimateToSeconds } from "@/lib/timer";
 import { cn } from "@/lib/utils";
 
 type ColorMode = "priority" | "category";
@@ -40,7 +40,7 @@ export default function Timeline() {
   );
 
   const estimateDays = (t: Task) => {
-    const secs = parseDurationToSeconds(t.time_estimate ?? "");
+    const secs = parseEstimateToSeconds(t.time_estimate);
     if (!secs) return 1;
     // 1 day = 8 working hours; min 1 day, max 14
     return Math.min(14, Math.max(1, Math.round(secs / (8 * 3600))));
