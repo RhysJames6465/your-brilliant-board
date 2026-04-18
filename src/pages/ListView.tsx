@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { format, parseISO } from "date-fns";
-import { ArrowUp, ArrowDown, ArrowUpDown, Bell, Plus } from "lucide-react";
+import { ArrowUp, ArrowDown, ArrowUpDown, Plus } from "lucide-react";
+import { AlertsBell } from "@/components/AlertsBell";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";

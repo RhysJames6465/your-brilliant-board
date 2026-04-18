@@ -11,6 +11,7 @@ import Focus from "./pages/Focus";
 import Calendar from "./pages/Calendar";
 import ListView from "./pages/ListView";
 import Timeline from "./pages/Timeline";
+import Alerts from "./pages/Alerts";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
             <Route path="/list" element={<ProtectedRoute><ListView /></ProtectedRoute>} />
             <Route path="/timeline" element={<ProtectedRoute><Timeline /></ProtectedRoute>} />
+            <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { addDays, addWeeks, differenceInCalendarDays, format, isSameDay, startOfWeek, parseISO } from "date-fns";
-import { Bell, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
+import { AlertsBell } from "@/components/AlertsBell";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";

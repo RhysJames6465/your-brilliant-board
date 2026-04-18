@@ -16,7 +16,8 @@ import {
   isBefore,
   startOfDay,
 } from "date-fns";
-import { ChevronLeft, ChevronRight, Plus, AlertTriangle, Bell } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, AlertTriangle } from "lucide-react";
+import { AlertsBell } from "@/components/AlertsBell";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
