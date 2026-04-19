@@ -100,15 +100,14 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
     setPriority((editTask?.priority as TaskPriority) ?? "medium");
   }, [open, editTask, defaultStatus]);
 
-  const handleTitleChange = (value: string) => {
-    setTitle(value);
-    if (!editTask) {
-      const parsed = parseNLP(value);
-      if (parsed.dueDate) setDueDate(parsed.dueDate);
-      if (parsed.dueTime) setDueTime(parsed.dueTime);
-      if (parsed.priority) setPriority(parsed.priority);
-    }
-  };
+  // Run NLP after title state is committed so the effect always sees the latest value.
+  useEffect(() => {
+    if (editTask || !title) return;
+    const parsed = parseNLP(title);
+    if (parsed.dueDate) setDueDate(parsed.dueDate);
+    if (parsed.dueTime) setDueTime(parsed.dueTime);
+    if (parsed.priority) setPriority(parsed.priority);
+  }, [title]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleTitleBlur = () => {
     if (!editTask) {
@@ -152,7 +151,7 @@ export function TaskDialog({ open, onOpenChange, defaultStatus = "todo", editTas
             <Label>Title</Label>
             <Input
               value={title}
-              onChange={e => handleTitleChange(e.target.value)}
+              onChange={e => setTitle(e.target.value)}
               onBlur={handleTitleBlur}
               placeholder='e.g. "Call client tomorrow 9am urgent"'
               required

@@ -94,7 +94,7 @@ export function TaskCard({ task, index, onEdit, onDelete }: Props) {
                   <DropdownMenuItem onClick={() => onEdit(task)}>
                     <Pencil className="w-3.5 h-3.5 mr-2" /> Edit
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onDelete(task.id)} className="text-destructive focus:text-destructive">
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(task.id); }} className="text-destructive focus:text-destructive">
                     <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
